@@ -1,2 +1,2 @@
 # PenduJs-Server
-Server for Pendu game multiplayer online
+Node server for Pendu game multiplayer online
