@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noImplicitThis": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "build",
+        "removeComments": false,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "target": "es6"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "./src/**/*",
+        "types/**/*.d.ts"
+    ]
+}
