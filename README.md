@@ -1,4 +1,6 @@
 npm install
+
+
 mongod -storageEngine=mmapv1 -dbpath D:\path\to\data\db
 
 
