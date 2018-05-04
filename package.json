@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
+    "install": "cp -rf src_externes/@amiltone node_modules/",
     "lint": "tslint -c tslint.json src/**",
     "start": "cross-env DOTENV_FILE=.env  node build/app.js",
     "start-dev": "npm-run-all --parallel build:watch assets:start-dev",

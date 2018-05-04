@@ -1,0 +1,67 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@amiltone/api-error-manager@^1.0.3",
+        "scope": "@amiltone",
+        "escapedName": "@amiltone%2fapi-error-manager",
+        "name": "@amiltone/api-error-manager",
+        "rawSpec": "^1.0.3",
+        "spec": ">=1.0.3 <2.0.0",
+        "type": "range"
+      },
+      "C:\\Users\\hnouts\\Documents\\babyltone-backend"
+    ]
+  ],
+  "_from": "@amiltone/api-error-manager@>=1.0.3 <2.0.0",
+  "_id": "@amiltone/api-error-manager@1.0.3",
+  "_inCache": true,
+  "_location": "/@amiltone/api-error-manager",
+  "_nodeVersion": "6.10.3",
+  "_npmUser": {},
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@amiltone/api-error-manager@^1.0.3",
+    "scope": "@amiltone",
+    "escapedName": "@amiltone%2fapi-error-manager",
+    "name": "@amiltone/api-error-manager",
+    "rawSpec": "^1.0.3",
+    "spec": ">=1.0.3 <2.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "http://192.168.10.46:4873/@amiltone%2fapi-error-manager/-/api-error-manager-1.0.3.tgz",
+  "_shasum": "c3f8b71e5b058fc10c110e546503dc0825133d1e",
+  "_shrinkwrap": null,
+  "_spec": "@amiltone/api-error-manager@^1.0.3",
+  "_where": "C:\\Users\\hnouts\\Documents\\babyltone-backend",
+  "author": {
+    "name": "nprin@amiltone.com"
+  },
+  "dependencies": {},
+  "description": "API Error Manager",
+  "devDependencies": {},
+  "dist": {
+    "shasum": "c3f8b71e5b058fc10c110e546503dc0825133d1e",
+    "tarball": "http://192.168.10.46:4873/@amiltone%2fapi-error-manager/-/api-error-manager-1.0.3.tgz"
+  },
+  "gitHead": "3830a11ec8d81b95933b0787be7a16ee64ef7377",
+  "keywords": [
+    "error",
+    "manager"
+  ],
+  "license": "MIT",
+  "main": "js/index.js",
+  "name": "@amiltone/api-error-manager",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "typings": "js/index",
+  "version": "1.0.3"
+}

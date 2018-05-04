@@ -1,0 +1,33 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "declaration": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "../js"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./src/api-errors.ts",
+        "./src/api-error.ts",
+        "./src/error-handler.ts",
+        "./src/sub-errors/forbidden-error.ts",
+        "./src/sub-errors/internal-error.ts",
+        "./src/sub-errors/missing-field.ts",
+        "./src/sub-errors/not-found.ts",
+        "./src/sub-errors/too-long-uri.ts",
+        "./src/sub-errors/mongodb-error.ts",
+        "./src/sub-errors/jwt-error.ts",
+        "./index.ts",
+        "./typings/node/node.d.ts",
+        "./typings/tsd.d.ts"
+    ]
+}
