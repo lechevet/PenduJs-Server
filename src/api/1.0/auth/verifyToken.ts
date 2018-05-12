@@ -12,7 +12,7 @@ export const post: Operation = async function(req: any, res: any, next: any): Pr
         responseStatus: 200,
         responseMessage: `Token is valid.`
       }));
-      res.status(200).json(authResponse);
+      res.status(200).json({authResponse});
     } catch (error) {
       next(error);
     }
