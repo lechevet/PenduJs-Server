@@ -102,11 +102,11 @@ export const usersService = {
         );
 
         /* On envoie un mail vers l'admin pour notifier une inscription en attente */
-        const userRole: any = await mongoHelper.findOne(
-          config.database.mongoDB.users_collection,
-          { email_address: credential.email_address }
-        );
-        await mailService.sendPendingRegisterMail(credential.email_address, credential.firstName, credential.lastName, userRole.role);
+        // const userRole: any = await mongoHelper.findOne(
+        //   config.database.mongoDB.users_collection,
+        //   { email_address: credential.email_address }
+        // );
+        // await mailService.sendPendingRegisterMail(credential.email_address, credential.firstName, credential.lastName, userRole.role);
       } else {
         const error = new Error('Passwords are differents');
         throw new WrongCredentialError(error);

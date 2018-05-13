@@ -1,12 +1,12 @@
 import { config } from '../../config';
 import * as nodemailer from 'nodemailer';
 import { InvalidParametersError } from '../../models/errors/InvalidParametersError';
-import { MongoHelper } from '../../helpers/mongo.helper';
-import { NotFoundError } from '../../models/errors/NotFoundError';
+// import { MongoHelper } from '../../helpers/mongo.helper';
+// import { NotFoundError } from '../../models/errors/NotFoundError';
 import { EmailError } from '../../models/errors/EmailError';
 
 // tslint:disable-next-line:prefer-const
-let mongoHelper = new MongoHelper();
+// let mongoHelper = new MongoHelper();
 
 const smtpTransport = nodemailer.createTransport({
     host: 'mail.gandi.net',
@@ -39,39 +39,39 @@ export const mailService = {
             await smtpTransport.close();
         });
     },
-    async sendPendingRegisterMail(emailAddress: string, firstname: string, lastname: string, role: string): Promise<void> {
-        let emails: string = "";
-        const query: object = {
-            role: 'Administrator'
-        };
-        const mongoCursor = mongoHelper.find(config.database.mongoDB.users_collection, query);
-        const cursor = await mongoCursor;
+    // async sendPendingRegisterMail(emailAddress: string, firstname: string, lastname: string, role: string): Promise<void> {
+        // let emails: string = "";
+        // const query: object = {
+        //     role: 'Administrator'
+        // };
+        // const mongoCursor = mongoHelper.find(config.database.mongoDB.users_collection, query);
+        // const cursor = await mongoCursor;
 
-        const results = await cursor.toArray();
-        if (results.length === 0) {
-            console.log(config.database.mongoDB.users_collection);
-            const error = new Error('There is no Administrator');
-            throw new NotFoundError(error);
-        }
-        for (const e of results) {
-            emails += (e.email_address + ", ");
-        }
+        // const results = await cursor.toArray();
+        // if (results.length === 0) {
+        //     console.log(config.database.mongoDB.users_collection);
+        //     const error = new Error('There is no Administrator');
+        //     throw new NotFoundError(error);
+        // }
+        // for (const e of results) {
+        //     emails += (e.email_address + ", ");
+        // }
         // TODO
         // MISE EN PAGE MESSAGE
-        const mail = {
-            from: config.users.mail.admin.login,
-            to: emails,
-            subject: '[penduJs] Nouvelle demande d\'inscription',
-            html: `Un nouvel utilisateur souhaite s\'inscrire sur
-            penduJs Manager: ${firstname} ${lastname} <br> ${emailAddress} <br><br> Role: ${role}.`
-        };
-        await smtpTransport.sendMail(mail, async (err: any): Promise<void> => {
-            if (err) {
-                throw new EmailError(err);
-            }
-            await smtpTransport.close();
-        });
-    },
+        // const mail = {
+        //     from: config.users.mail.admin.login,
+        //     to: emails,
+        //     subject: '[penduJs] Nouvelle demande d\'inscription',
+        //     html: `Un nouvel utilisateur souhaite s\'inscrire sur
+        //     penduJs Manager: ${firstname} ${lastname} <br> ${emailAddress} <br><br> Role: ${role}.`
+        // };
+        // await smtpTransport.sendMail(mail, async (err: any): Promise<void> => {
+        //     if (err) {
+        //         throw new EmailError(err);
+        //     }
+        //     await smtpTransport.close();
+        // });
+    // },
     async sendValidateMail(emailAddress: string): Promise<void> {
 
         if (!emailAddress || emailAddress === '') {
