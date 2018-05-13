@@ -21,16 +21,16 @@ const mongoHelper = new MongoHelper();
 
 export const authService = {
 
-  async userLogin(credential: { login: string, password: string}): Promise<object> {
+  async userLogin(credential: { login: string, password: string }): Promise<object> {
 
     // first parsing, are the mail and password made of valid characters
-      if (credential.login === null) {
-        const error = new Error('Login is missing');
-        throw new WrongCredentialError(error);
-      }
+    if (credential.login === null) {
+      const error = new Error('Login is missing');
+      throw new WrongCredentialError(error);
+    }
 
 
-    const regex = new RegExp(/(.*)@amiltone.(fr|com)/);
+    const regex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     if (regex.test(credential.login) === false) {
       const error = new Error('Wrong credentials');
       throw new WrongCredentialError(error);
@@ -39,13 +39,14 @@ export const authService = {
     const user: any = await mongoHelper.findOne(
       config.database.mongoDB.users_collection,
       { email_address: credential.login },
-      { fields: {
+      {
+        fields: {
           created_at: 0,
           updated_at: 0,
           deleted_at: 0
-      }}
+        }
+      }
     );
-
 
     // checking user credential and creating token if needed
     // if the value is null, then we didn't find a match in the database
@@ -98,7 +99,7 @@ export const authService = {
       { $set: { last_login: moment().toISOString() } }
     );
 
-    return token ;
+    return token;
   },
 
   async loginRapide(email: string): Promise<object> {
@@ -114,12 +115,14 @@ export const authService = {
     const user: any = await mongoHelper.findOne(
       config.database.mongoDB.users_collection,
       { email_address: email },
-      { fields: {
+      {
+        fields: {
           created_at: 0,
           updated_at: 0,
           deleted_at: 0,
           password: 0
-      }}
+        }
+      }
     );
     // checking user credential and creating token if needed
     if (!user) {
@@ -136,17 +139,17 @@ export const authService = {
   },
 
 
-/* Changement du mot de passe avec un utilisateur connecté
-TODO : Recupérer le token de l'utilisateur
-*/
-  async changePassword(credential: {token: string, password1: string, password2: string }): Promise<object> {
-    if ( !credential.password1 || !credential.password2 || !credential.token) {
+  /* Changement du mot de passe avec un utilisateur connecté
+  TODO : Recupérer le token de l'utilisateur
+  */
+  async changePassword(credential: { token: string, password1: string, password2: string }): Promise<object> {
+    if (!credential.password1 || !credential.password2 || !credential.token) {
       const error = new Error('Missing information for change password');
       throw new WrongCredentialError(error);
     } else {
 
-      const decodedJwt: any =  jwt.verify(credential.token, config.application.jwt.secret);
-      if ( !decodedJwt) {
+      const decodedJwt: any = jwt.verify(credential.token, config.application.jwt.secret);
+      if (!decodedJwt) {
         const error = new Error('Authentication error: Invalid JWT user id');
         throw new JwtValidationError(error);
       }
@@ -172,8 +175,8 @@ TODO : Recupérer le token de l'utilisateur
       }
 
       /* update du password */
-       /* On génère le nouveau mot de passe */
-       if (credential.password1 === credential.password2) {
+      /* On génère le nouveau mot de passe */
+      if (credential.password1 === credential.password2) {
         const salt = 'salt';
         const iterations = 12345;
         const algorithm = 'sha512';
@@ -187,16 +190,17 @@ TODO : Recupérer le token de l'utilisateur
         await mongoHelper.updateOne(
           config.database.mongoDB.users_collection,
           { email_address: user.email_address },
-          { $set: {
-            password: {
-              salt,
-              iterations,
-              algorithm,
-              length: hashLength,
-              hash: hashedCredentials.toString('hex')
+          {
+            $set: {
+              password: {
+                salt,
+                iterations,
+                algorithm,
+                length: hashLength,
+                hash: hashedCredentials.toString('hex')
+              }
             }
-          }
-        });
+          });
 
         /* On recupere toutes les infos updated de l'user */
         const returnuser = await mongoHelper.findOne(
@@ -207,61 +211,61 @@ TODO : Recupérer le token de l'utilisateur
         );
         return returnuser;
 
-    } else {
-      const error = new Error('Passwords are differents');
-      throw new WrongCredentialError(error);
-    }
+      } else {
+        const error = new Error('Passwords are differents');
+        throw new WrongCredentialError(error);
+      }
 
     }
   },
 
-/* Changer un password oublié : verification du token contenu dans le lien envoyé par mail a l'utilisateur */
-async changeForgetPassword(credential: {token: string }): Promise<object> {
-  if ( !credential.token) {
-    const error = new Error('Missing information for change password');
-    throw new WrongCredentialError(error);
-  } else {
-
-
-    /* recuperer email en fonction du token */
-    const decodedJwt = jwt.verify(credential.token, config.application.jwt.secret);
-
-    if (!decodedJwt) {
-      const error = new Error('Authentication error: Invalid JWT user id');
-      throw new JwtValidationError(error);
-    }
-
-    const login = decodedJwt.email_address;
-
-    /* Verifier que le mail existe dans bdd */
-    const user: any = await mongoHelper.findOne(
-      config.database.mongoDB.users_collection,
-      { email_address: login }
-    );
-    // checking user credential and creating token if needed
-    // if the value is null, then we didn't find a match in the database
-    if (!user) {
-      const error = new Error('Non existant credential');
+  /* Changer un password oublié : verification du token contenu dans le lien envoyé par mail a l'utilisateur */
+  async changeForgetPassword(credential: { token: string }): Promise<object> {
+    if (!credential.token) {
+      const error = new Error('Missing information for change password');
       throw new WrongCredentialError(error);
-    }
+    } else {
 
-    /* email ok, creer new token de connexion */
-     const token = jwt.sign(
-      {
-        email_address: login,
-        role: user.role
-      },
-      config.application.jwt.secret,
-      {
-        expiresIn: config.application.jwt.expiration_time
+
+      /* recuperer email en fonction du token */
+      const decodedJwt = jwt.verify(credential.token, config.application.jwt.secret);
+
+      if (!decodedJwt) {
+        const error = new Error('Authentication error: Invalid JWT user id');
+        throw new JwtValidationError(error);
       }
-    );
-  /* Renvoi du token de connexion */
 
-  return { token };
+      const login = decodedJwt.email_address;
 
-  }
-},
+      /* Verifier que le mail existe dans bdd */
+      const user: any = await mongoHelper.findOne(
+        config.database.mongoDB.users_collection,
+        { email_address: login }
+      );
+      // checking user credential and creating token if needed
+      // if the value is null, then we didn't find a match in the database
+      if (!user) {
+        const error = new Error('Non existant credential');
+        throw new WrongCredentialError(error);
+      }
+
+      /* email ok, creer new token de connexion */
+      const token = jwt.sign(
+        {
+          email_address: login,
+          role: user.role
+        },
+        config.application.jwt.secret,
+        {
+          expiresIn: config.application.jwt.expiration_time
+        }
+      );
+      /* Renvoi du token de connexion */
+
+      return { token };
+
+    }
+  },
 
   async createToken(user: { email_address: string, role: string }): Promise<object> {
     if (!user.email_address || !user.role) {
@@ -307,13 +311,13 @@ async changeForgetPassword(credential: {token: string }): Promise<object> {
     }
   },
 
-  async hashPassword( password: string,
-                      params: {
-                        salt?: any,
-                        iterations?: number,
-                        algorithm?: string,
-                        length?: number
-                      }): Promise<any> {
+  async hashPassword(password: string,
+    params: {
+      salt?: any,
+      iterations?: number,
+      algorithm?: string,
+      length?: number
+    }): Promise<any> {
     try {
       const hsalt = (params.salt ? params.salt : await crypto.randomBytes(32).toString('hex'));
       const hiterations = (params.iterations ? params.iterations : 12345);
@@ -394,7 +398,7 @@ async changeForgetPassword(credential: {token: string }): Promise<object> {
       );
       /* Si user est vide, on renvoie une erreur */
       if (!user) {
-        const error = new Error ('Non existing register');
+        const error = new Error('Non existing register');
         throw new NotFoundError(error);
       }
       return user;
@@ -467,13 +471,13 @@ async changeForgetPassword(credential: {token: string }): Promise<object> {
     }
   },
 
-  async verifyToken(userJwt: string): Promise<any> {
+  async verifyToken(userJwt: string): Promise<boolean> {
     try {
       jwt.verify(userJwt, config.application.jwt.secret);
       // const islogged = new BehaviorSubject<boolean>(true);
       return true;
     } catch (error) {
-     // const islogged = new BehaviorSubject<boolean>(false);
+      // const islogged = new BehaviorSubject<boolean>(false);
       return false;
     }
   }

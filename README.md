@@ -1,10 +1,3 @@
-npm install
+This project is created from a GitLab [Project Template](https://docs.gitlab.com/ce/gitlab-basics/create-project.html)
 
-
-mongod -storageEngine=mmapv1 -dbpath D:\path\to\data\db
-
-
-npm run build
-
-npm run start -dev
-http://localhost:4187/docs/#/
+Additions and changes to the project can be proposed [on the original project](https://gitlab.com/gitlab-org/project-templates/express)

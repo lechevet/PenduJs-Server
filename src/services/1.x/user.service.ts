@@ -36,7 +36,7 @@ export const usersService = {
       throw new WrongCredentialError(error);
     }
     /* Vérifie si l'adresse mail à le bon format */
-    const regex = new RegExp(/(.*)@amiltone.(fr|com)/);
+    const regex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     if (regex.test(credential.email_address) === false) {
       const error = new Error('Email address incorrect format');
       throw new WrongCredentialError(error);
@@ -97,7 +97,7 @@ export const usersService = {
               length: hashLength,
               hash: hashedCredentials.toString('hex')
             },
-            avatar: path.join(config.application.img.dir, '/admin.jpg')
+            avatar: path.join(config.application.img.dir, '/admin.png')
           }
         );
 
@@ -162,12 +162,12 @@ export const usersService = {
     const cursor = await mongoCursor;
 
     let results = await cursor.toArray();
-    let Path = path.join(config.application.img.dir, '/admin.jpg') ;
+    let Path = path.join(config.application.img.dir, '/admin.png') ;
     results = results.map(r => {
       if (r.avatar  && fs.existsSync(r.avatar)) {
         Path = r.avatar;
       }else {
-        Path = path.join(config.application.img.dir, '/admin.jpg');
+        Path = path.join(config.application.img.dir, '/admin.png');
       }
       const bitmap = fs.readFileSync(Path);
       const newavatar = new Buffer(bitmap).toString('base64');
@@ -209,7 +209,7 @@ export const usersService = {
         throw new NotFoundError(error);
       }
       /* Encodage img a l'url de avatar */
-      let Path = path.join(config.application.img.dir, '/admin.jpg') ;
+      let Path = path.join(config.application.img.dir, '/admin.png') ;
       if (user.avatar && fs.existsSync(user.avatar)) {
         Path = user.avatar;
       }
@@ -453,13 +453,14 @@ export const usersService = {
 
   async getUserByEmail(userEmail: string): Promise<object> {
     try {
-      const user = await mongoHelper.findOne(
+      const user: any = await mongoHelper.findOne(
         config.database.mongoDB.users_collection,
         { email_address: userEmail },
-        {
-          fields: {
-          }
-        }
+        { fields: {
+            created_at: 0,
+            updated_at: 0,
+            deleted_at: 0
+        }}
       );
       if (!user) {
         const error = new Error('Non existing user');

@@ -115,7 +115,7 @@ export const defaultConfig: Config = {
   },
   roles: {
     administrator: 'Administrator',
-    simpleUser: 'SimpleUser',
+    simpleUser: 'SimpleUser'
   },
   users: {
     default: {

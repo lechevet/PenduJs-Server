@@ -28,7 +28,7 @@ export const mailService = {
         const mail = {
             from: config.users.mail.admin.login,
             to: emailAddress,
-            subject: '[PenduJs] Mot de passe oublié',
+            subject: '[penduJs] Mot de passe oublié',
             html: `${firstname} ${lastname} <br>Suivez ce lien pour créer un nouveau
             mot de passe: <br> <a href="http://${config.application.ip}:4200/new-password?token=${token}"</a>Créer un nouveau mot de passe.`
         };
@@ -49,6 +49,7 @@ export const mailService = {
 
         const results = await cursor.toArray();
         if (results.length === 0) {
+            console.log(config.database.mongoDB.users_collection);
             const error = new Error('There is no Administrator');
             throw new NotFoundError(error);
         }
@@ -60,9 +61,9 @@ export const mailService = {
         const mail = {
             from: config.users.mail.admin.login,
             to: emails,
-            subject: '[PenduJs] Nouvelle demande d\'inscription',
+            subject: '[penduJs] Nouvelle demande d\'inscription',
             html: `Un nouvel utilisateur souhaite s\'inscrire sur
-            PenduJs Manager: ${firstname} ${lastname} <br> ${emailAddress} <br><br> Role: ${role}.`
+            penduJs Manager: ${firstname} ${lastname} <br> ${emailAddress} <br><br> Role: ${role}.`
         };
         await smtpTransport.sendMail(mail, async (err: any): Promise<void> => {
             if (err) {
@@ -83,8 +84,8 @@ export const mailService = {
         const mail = {
             from: config.users.mail.admin.login,
             to: emailAddress,
-            subject: '[PenduJs] Inscription validée',
-            html: 'Votre inscritpion sur PenduJs vient d\'être validée.'
+            subject: '[penduJs] Inscription validée',
+            html: 'Votre inscritpion sur penduJs vient d\'être validée.'
         };
         await smtpTransport.sendMail(mail, async (err: any): Promise<any> => {
             if (err) {
@@ -104,8 +105,8 @@ export const mailService = {
         const mail = {
             from: config.users.mail.admin.login,
             to: emailAddress,
-            subject: '[PenduJs] Inscription refusée',
-            html: 'Votre inscritpion sur PenduJs a été refusée.'
+            subject: '[penduJs] Inscription refusée',
+            html: 'Votre inscritpion sur penduJs a été refusée.'
         };
         await smtpTransport.sendMail(mail, async (err: any): Promise<any> => {
             if (err) {

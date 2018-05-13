@@ -5,14 +5,14 @@ import { authService } from '../../../services/1.x/auth.service';
 
 export const post: Operation = async function(req: any, res: any, next: any): Promise<void> {
     try {
-      const authResponse: any = await authService.verifyToken(req.body.token);
+      const tokenValid: any = await authService.verifyToken(req.body.token);
       logger.info(generateLog({
         method: req.method,
         url: req.url,
         responseStatus: 200,
         responseMessage: `Token is valid.`
       }));
-      res.status(200).json({authResponse});
+      res.status(200).json({tokenValid});
     } catch (error) {
       next(error);
     }
@@ -41,9 +41,14 @@ post.apiDoc = {
   ],
   responses: {
     200: {
-      description: 'Token is valid',
+      description: 'Token validity: true/false',
       schema: {
-        type: 'object'
+        type: 'object',
+        properties: {
+          tokenValid: {
+            type: 'boolean'
+          }
+        }
       }
     },
     default: {
