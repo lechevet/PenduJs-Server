@@ -54,10 +54,10 @@ export const gameService = {
     
         /* Renvoie une erreur s'il n'y en a pas */
         let results = await cursor.toArray();
-        if (results.length === 0) {
-          const error = new Error('There is no valid lobby');
-          throw new NotFoundError(error);
-        }
+        // if (results.length === 0) {
+        //   const error = new Error('There is no valid lobby');
+        //   throw new NotFoundError(error);
+        // }
         return results;
       },
     
