@@ -89,7 +89,7 @@ export const usersService = {
             lastName: credential.lastName,
             email_address: credential.email_address,
             role: 'SimpleUser',
-            status: 'pending',
+            status: 'valid',
             password: {
               salt,
               iterations,
@@ -118,7 +118,7 @@ export const usersService = {
       firstName: credential.firstName,
       lastName: credential.lastName,
       email_address: credential.email_address,
-      status: 'pending'
+      status: 'valid'
     };
 
     return newcredential;

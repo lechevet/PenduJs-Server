@@ -4,7 +4,7 @@ import { generateLog, logger } from '../../../../helpers/logger.helper';
 import { checkPermissionLevel, Permissions } from '../../../../helpers/permissions.helper';
 import { authService } from '../../../../services/1.x/auth.service';
 import { usersService } from '../../../../services/1.x/user.service';
-import { mailService } from '../../../../services/1.x/mail.service';
+//import { mailService } from '../../../../services/1.x/mail.service';
 
 const getParameters: OpenApi.Parameters =  [
   {
@@ -21,7 +21,7 @@ export const put: Operation = async function(req: any, res: any, next: any): Pro
     checkPermissionLevel(req.user, [ Permissions.VALIDATE_REGISTER ]);
     await authService.validateRegister(req.params.register);
     const user: any = await usersService.getUser(req.params.register);
-    await mailService.sendValidateMail(user.email_address);
+    // await mailService.sendValidateMail(user.email_address);
     logger.info(generateLog({
       method: req.method,
       url: req.url,
