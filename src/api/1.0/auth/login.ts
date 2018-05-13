@@ -51,9 +51,6 @@ post.apiDoc = {
         properties: {
           user: {
             type: 'object'
-          },
-          token: {
-            type: 'string'
           }
         }
       }

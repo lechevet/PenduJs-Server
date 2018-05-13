@@ -98,7 +98,7 @@ export const authService = {
       { email_address: user.email_address },
       { $set: { last_login: moment().toISOString() } }
     );
-
+    console.log(token);
     return token;
   },
 
@@ -282,10 +282,9 @@ export const authService = {
           expiresIn: config.application.jwt.expiration_time
         }
       );
-
+      user['token'] = token;
       return {
-        user,
-        token
+        user
       };
     }
   },
