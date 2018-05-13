@@ -41,6 +41,7 @@ export interface Config {
       port: number;
       database_name: string;
       users_collection: string;
+      lobbies_collection: string;
       salt_collection: string;
       db_migrations_collection: string;
     };
@@ -106,6 +107,7 @@ export const defaultConfig: Config = {
       port: 27017,
       database_name: '',
       users_collection: '',
+      lobbies_collection: '',
       salt_collection: 'salt',
       db_migrations_collection: 'DB-Migrations'
     },
