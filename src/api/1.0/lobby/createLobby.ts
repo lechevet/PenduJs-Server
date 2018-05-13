@@ -4,12 +4,12 @@ import { gameService } from '../../../services/1.x/game.service';
 
 export const post: Operation = async function(req: any, res: any, next: any): Promise<void> {
     try {
-      const match: any = await gameService.initMatch(req.body);
+      const lobby: any = await gameService.initMatch(req.body);
       logger.info(generateLog({
         responseStatus: 201,
-        responseMessage: `Match with id: ${match._id} successfully initiated.`
+        responseMessage: `Lobby with id: ${lobby._id} successfully initiated.`
       }));
-      res.status(201).json(match);
+      res.status(201).json(lobby);
     } catch (error) {
       logger.error(error);
       next(error);
@@ -26,9 +26,9 @@ post.apiDoc = {
       in: 'body',
       schema: {
         type: 'object',
-        required: ['lobbyName'],
+        required: ['name'],
         properties: {
-          lobbyName: {
+          name: {
             type: 'string'
           }
         }

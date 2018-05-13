@@ -14,44 +14,63 @@ export const gameService = {
     async getLobby(id: string): Promise<object> {
         const ID = new mongo.ObjectId(id);
         try {
-          const lobby = await mongoHelper.findOne(
-            config.database.mongoDB.lobbies_collection,
-            {
-              _id: ID
-            },
-            {
-              fields: {
-                // created_at: 0,
-                updated_at: 0,
-                deleted_at: 0
-              }
+            const lobby = await mongoHelper.findOne(
+                config.database.mongoDB.lobbies_collection,
+                {
+                    _id: ID
+                },
+                {
+                    fields: {
+                        // created_at: 0,
+                        updated_at: 0,
+                        deleted_at: 0
+                    }
+                }
+            );
+            if (!lobby) {
+                const error = new Error('Non existing lobby');
+                throw new NotFoundError(error);
             }
-          );
-          if (!lobby) {
-            const error = new Error('Non existing lobby');
-            throw new NotFoundError(error);
-          }
-          return lobby;
+            return lobby;
         } catch (error) {
-          if (!error.errorCode) {
-            throw new MongoError(error);
-          }
-          throw error;
+            if (!error.errorCode) {
+                throw new MongoError(error);
+            }
+            throw error;
         }
-      },
+    },
+
+    // Safe delete (add "deleted_at": timestamp) the lobby
+    async deleteLobby(id: string): Promise<void> {
+        const ID = new mongo.ObjectId(id);
+        try {
+            return await mongoHelper.deleteOne(
+                config.database.mongoDB.lobbies_collection,
+                {
+                    _id: ID,
+                    status: "valid"
+                },
+                {},
+                false
+            );
+        } catch (error) {
+            throw new NotFoundError(error);
+        }
+    },
+
 
     // get all lobbies
     async getAllLobbies(): Promise<object[]> {
         const query: object = {
-          status: 'valid'
+            status: 'valid'
         };
         /* Cherche s'il y a des nouvelles inscriptions */
         const mongoCursor = mongoHelper.find(
-          config.database.mongoDB.lobbies_collection,
-          query
+            config.database.mongoDB.lobbies_collection,
+            query
         );
         const cursor = await mongoCursor;
-    
+
         /* Renvoie une erreur s'il n'y en a pas */
         let results = await cursor.toArray();
         // if (results.length === 0) {
@@ -59,15 +78,15 @@ export const gameService = {
         //   throw new NotFoundError(error);
         // }
         return results;
-      },
-    
+    },
+
     // Create a empty match
     async createLobby(parameters: {
-        lobbyName?: string
+        name?: string
     }): Promise<any> {
         // prepare the final query
         const newLobby = {
-            name: parameters.lobbyName,
+            name: parameters.name,
             status: 'valid'
         };
         // execute the query
@@ -114,7 +133,7 @@ export const gameService = {
 
     // Create and start a match
     async initMatch(parameters: {
-        lobbyName: string
+        name: string
     }): Promise<object> {
         const result = await this.createLobby(parameters);
         // await matchHandlerService.setReadyMatch(result._id);
