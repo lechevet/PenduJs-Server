@@ -1065,7 +1065,7 @@ export const usersService = {
 &nbsp;
   async userRegister(credential:
     {
-      firstName: string,
+      userName: string,
       lastName: string,
       email_address: string,
       password1: string,
@@ -1127,7 +1127,7 @@ export const usersService = {
         user = await mongoHelper.insertOne(
           config.database.mongoDB.users_collection,
           {
-            firstName: credential.firstName,
+            userName: credential.userName,
             lastName: credential.lastName,
             email_address: credential.email_address,
             role: 'SimpleUser',
@@ -1148,7 +1148,7 @@ export const usersService = {
           config.database.mongoDB.users_collection,
           { email_address: credential.email_address }
         );
-        await mailService.sendPendingRegisterMail(credential.email_address, credential.firstName, credential.lastName, userRole.role);
+        await mailService.sendPendingRegisterMail(credential.email_address, credential.userName, credential.lastName, userRole.role);
       } else {
         const error = new Error('Passwords are differents');
         throw new WrongCredentialError(error);
@@ -1157,7 +1157,7 @@ export const usersService = {
 &nbsp;
     /* On renvoi les infos sans le mot de passe */
     const newcredential = {
-      firstName: credential.firstName,
+      userName: credential.userName,
       lastName: credential.lastName,
       email_address: credential.email_address,
       status: 'pending'
@@ -1172,7 +1172,7 @@ export const usersService = {
   },
 &nbsp;
   async getUsers(params: {
-    firstName: string,
+    userName: string,
     lastName: string,
     role_title: string,
     offset: number,
@@ -1182,8 +1182,8 @@ export const usersService = {
     fields: string[],
   }): Promise&lt;object[]&gt; {
     const query: any = {};
-    if (params.firstName) {
-      query.firstName = params.firstName;
+    if (params.userName) {
+      query.userName = params.userName;
     }
     if (params.lastName) {
       query.lastName = params.lastName;
@@ -1326,7 +1326,7 @@ export const usersService = {
     }
   },
 &nbsp;
-  // async updateUser(credential: { email_address: string, firstName: string, lastName: string, token: string }): Promise&lt;object&gt; {
+  // async updateUser(credential: { email_address: string, userName: string, lastName: string, token: string }): Promise&lt;object&gt; {
   //   try {
   //     /* recuperer email en fonction du token */
   //     const decodedJwt: any =  jwt.verify(credential.token, config.application.jwt.secret);
@@ -1359,7 +1359,7 @@ export const usersService = {
   //       { email_address: credential.email_address },
   //       {
   //         $set: {
-  //           firstName: credential.firstName,
+  //           userName: credential.userName,
   //           lastName: credential.lastName
 &nbsp;
   //         }
@@ -1524,7 +1524,7 @@ export const usersService = {
         // TODO
         const token: any = <span class="cstat-no" title="statement not covered" >await authService.createTokenLinkPassword(user);</span>
         // sendMail
-<span class="cstat-no" title="statement not covered" >        await mailService.sendNewPasswordMail(user.email_address, user.firstName, user.lastName, token.token);</span>
+<span class="cstat-no" title="statement not covered" >        await mailService.sendNewPasswordMail(user.email_address, user.userName, user.lastName, token.token);</span>
 <span class="cstat-no" title="statement not covered" >        return 'ok';</span>
       }
     } catch (error) {

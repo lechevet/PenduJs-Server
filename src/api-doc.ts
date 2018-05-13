@@ -31,10 +31,7 @@ export const apiDoc = {
     User: {
       type: 'object',
       properties: {
-        firstName: {
-          type: 'string'
-        },
-        lastName: {
+        userName: {
           type: 'string'
         },
         email_address: {
@@ -48,7 +45,7 @@ export const apiDoc = {
           ]
         }
       },
-      required: [ 'firstName', 'lastName', 'email_address', 'role' ]
+      required: [ 'userName', 'email_address', 'role' ]
     },
   },
   paths: {

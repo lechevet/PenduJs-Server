@@ -11,8 +11,7 @@ export = {
     await mongoHelper.insertOne(
       config.database.mongoDB.users_collection,
       {
-        firstName: 'Default',
-        lastName: 'Admin',
+        userName: 'Default',
         email_address: config.users.default.admin.login,
         role: 'Administrator',
         password

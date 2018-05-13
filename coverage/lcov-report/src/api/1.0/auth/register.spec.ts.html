@@ -514,7 +514,7 @@ describe('/auth/register', () =&gt; {
       await mongoHelper.insertOne(
         config.database.mongoDB.users_collection,
         {
-          firstName: 'firstname',
+          userName: 'userName',
           lastName: 'lastname',
           email_address: config.users.default.admin.login,
           role: 'Administrator',
@@ -540,7 +540,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: config.users.default.admin.login,
-            firstName: 'firstname',
+            userName: 'userName',
             lastName: 'lastname',
             password1: 'test',
             password2: 'test'
@@ -563,7 +563,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: "admin2@amiltone.com",
-            firstName: 'firstname2',
+            userName: 'userName2',
             lastName: 'lastname2',
             password1: 'test1',
             password2: 'test'
@@ -585,7 +585,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: "admin2@amiltone.fr",
-            firstName: 'firstname2',
+            userName: 'userName2',
             lastName: 'lastname2',
             password1: 'tes',
             password2: 'tes'
@@ -607,7 +607,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: "admin2@test.api",
-            firstName: 'firstname2',
+            userName: 'userName2',
             lastName: 'lastname2',
             password1: 'test',
             password2: 'test'
@@ -629,7 +629,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: config.users.default.admin.login,
-            firstName: 'firstname2',
+            userName: 'userName2',
             lastName: 'lastname2',
             password1: 'test',
             password2: 'test',
@@ -656,7 +656,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: config.users.default.admin.login,
-            firstName: 'firstname2',
+            userName: 'userName2',
             password1: 'test',
             password2: 'test'
           })
@@ -682,7 +682,7 @@ describe('/auth/register', () =&gt; {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: 'user@amiltone.com',
-            firstName: 'firstname',
+            userName: 'userName',
             lastName: 'lastname',
             password1: 'test',
             password2: 'test'

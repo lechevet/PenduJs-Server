@@ -156,31 +156,30 @@ describe('users service', function (): void {
       });
 
       await userServiceFunctions.getUsers({
-        firstName: 'John',
-        lastName: 'Doe',
+        userName: 'John',
         offset: 25,
         limit: 0,
-        sort: 'lastName',
+        sort: 'userName',
         order: -1,
-        fields: ['firstName', 'lastName']
+        fields: ['userName']
       });
       expect(spyCollection.firstCall.args[0]).to.equal(
         config.database.mongoDB.users_collection
       );
       expect(spyQuery.firstCall.args[0]).to.deep.equal({
-        firstName: 'John',
+        userName: 'John',
         lastName: 'Doe',
         status: 'valid'
       });
       expect(spyParams.firstCall.args[0]).to.deep.equal(
         {
-          firstName: 'John',
+          userName: 'John',
           lastName: 'Doe',
           offset: 25,
           limit: 0,
           sort: 'lastName',
           order: -1,
-          fields: ['firstName', 'lastName']
+          fields: ['userName', 'lastName']
         }
       );
       await revertMongoHelper();

@@ -25,12 +25,9 @@ put.apiDoc = {
       in: 'body',
       schema: {
         type: 'object',
-        required: ['firstName', 'lastName', 'email_address', 'password1', 'password2' ],
+        required: ['userName', 'email_address', 'password1', 'password2' ],
         properties: {
-          firstName: {
-            type: 'string'
-          },
-          lastName: {
+          userName: {
             type: 'string'
           },
           email_address: {

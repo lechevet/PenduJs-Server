@@ -25,8 +25,7 @@ async function newPendingRegister(userLogin: string, userPassword: string): Prom
     await mongoHelper.insertOne(
       config.database.mongoDB.users_collection,
       {
-        firstName: 'firstname',
-        lastName: 'lastname',
+        userName: 'userName',
         email_address: userLogin,
         role: 'SimpleUser',
         password: {
@@ -65,8 +64,7 @@ async function login(userLogin: string, userPassword: string, userRole: string, 
     await mongoHelper.insertOne(
       config.database.mongoDB.users_collection,
       {
-        firstName: 'firstname',
-        lastName: 'lastname',
+        userName: 'userName',
         email_address: userLogin,
         role: userRole,
         password: {
@@ -111,8 +109,7 @@ describe('/validateRegister/{register}', () => {
                 .expect((res) => {
                     expect(res.error).to.equal(false);
                     expect(res.body).to.not.equal(null);
-                    expect(res.body.firstName).to.equal('firstname');
-                    expect(res.body.lastName).to.equal('lastname');
+                    expect(res.body.userName).to.equal('userName');
                     expect(res.body.email_address).to.equal('user@amiltone.com');
                     expect(res.body.role).to.equal('SimpleUser');
                 });

@@ -18,7 +18,7 @@ const smtpTransport = nodemailer.createTransport({
 
 export const mailService = {
 
-    async sendNewPasswordMail(emailAddress: string, firstname: string, lastname: string, token: string): Promise<void> {
+    async sendNewPasswordMail(emailAddress: string, userName: string, token: string): Promise<void> {
         if (!emailAddress) {
             const error = new Error('User has no email address.');
             throw new InvalidParametersError(error);
@@ -29,7 +29,7 @@ export const mailService = {
             from: config.users.mail.admin.login,
             to: emailAddress,
             subject: '[penduJs] Mot de passe oublié',
-            html: `${firstname} ${lastname} <br>Suivez ce lien pour créer un nouveau
+            html: `${userName} <br>Suivez ce lien pour créer un nouveau
             mot de passe: <br> <a href="http://${config.application.ip}:4200/new-password?token=${token}"</a>Créer un nouveau mot de passe.`
         };
         await smtpTransport.sendMail(mail, async (err: any): Promise<void> => {
@@ -39,7 +39,7 @@ export const mailService = {
             await smtpTransport.close();
         });
     },
-    // async sendPendingRegisterMail(emailAddress: string, firstname: string, lastname: string, role: string): Promise<void> {
+    // async sendPendingRegisterMail(emailAddress: string, userName: string, lastname: string, role: string): Promise<void> {
         // let emails: string = "";
         // const query: object = {
         //     role: 'Administrator'
@@ -63,7 +63,7 @@ export const mailService = {
         //     to: emails,
         //     subject: '[penduJs] Nouvelle demande d\'inscription',
         //     html: `Un nouvel utilisateur souhaite s\'inscrire sur
-        //     penduJs Manager: ${firstname} ${lastname} <br> ${emailAddress} <br><br> Role: ${role}.`
+        //     penduJs Manager: ${userName} ${lastname} <br> ${emailAddress} <br><br> Role: ${role}.`
         // };
         // await smtpTransport.sendMail(mail, async (err: any): Promise<void> => {
         //     if (err) {

@@ -302,7 +302,7 @@ const smtpTransport = nodemailer.createTransport({
 &nbsp;
 export const mailService = {
 &nbsp;
-    async sendNewPasswordMail(emailAddress: string, firstname: string, lastname: string, token: string): Promise&lt;void&gt; {
+    async sendNewPasswordMail(emailAddress: string, userName: string, lastname: string, token: string): Promise&lt;void&gt; {
 <span class="cstat-no" title="statement not covered" >        if (!emailAddress) {</span>
             const error = <span class="cstat-no" title="statement not covered" >new Error('User has no email address.');</span>
 <span class="cstat-no" title="statement not covered" >            throw new InvalidParametersError(error);</span>
@@ -313,7 +313,7 @@ export const mailService = {
             from: config.users.mail.admin.login,
             to: emailAddress,
             subject: '[penduJs] Mot de passe oublié',
-            html: `${firstname} ${lastname} &lt;br&gt;Suivez ce lien pour créer un nouveau
+            html: `${userName} ${lastname} &lt;br&gt;Suivez ce lien pour créer un nouveau
             mot de passe: &lt;br&gt; &lt;a href="http://${config.application.ip}:4200/new-password?token=${token}"&lt;/a&gt;Créer un nouveau mot de passe.`
         };
 <span class="cstat-no" title="statement not covered" >        await smtpTransport.sendMail(mail, <span class="fstat-no" title="function not covered" >async (e</span>rr: any): Promise&lt;void&gt; =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span></span>
@@ -323,7 +323,7 @@ export const mailService = {
 <span class="cstat-no" title="statement not covered" >            await smtpTransport.close();</span>
         });
     },
-    async sendPendingRegisterMail(emailAddress: string, firstname: string, lastname: string, role: string): Promise&lt;void&gt; {
+    async sendPendingRegisterMail(emailAddress: string, userName: string, lastname: string, role: string): Promise&lt;void&gt; {
         let emails: string = "";
         const query: object = {
             role: 'Administrator'
@@ -347,7 +347,7 @@ export const mailService = {
             to: emails,
             subject: '[penduJs] Nouvelle demande d\'inscription',
             html: `Un nouvel utilisateur souhaite s\'inscrire sur
-            penduJs Manager: ${firstname} ${lastname} &lt;br&gt; ${emailAddress} &lt;br&gt;&lt;br&gt; Role: ${role}.`
+            penduJs Manager: ${userName} ${lastname} &lt;br&gt; ${emailAddress} &lt;br&gt;&lt;br&gt; Role: ${role}.`
         };
         await smtpTransport.sendMail(mail, async (err: any): Promise&lt;void&gt; =&gt; {
             <span class="missing-if-branch" title="if path not taken" >I</span>if (err) {

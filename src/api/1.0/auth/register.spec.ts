@@ -32,8 +32,7 @@ describe('/auth/register', () => {
       await mongoHelper.insertOne(
         config.database.mongoDB.users_collection,
         {
-          firstName: 'firstname',
-          lastName: 'lastname',
+          userName: 'userName',
           email_address: config.users.default.admin.login,
           role: 'Administrator',
           password: {
@@ -58,8 +57,7 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: config.users.default.admin.login,
-            firstName: 'firstname',
-            lastName: 'lastname',
+            userName: 'userName',
             password1: 'test',
             password2: 'test'
           })
@@ -81,8 +79,7 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: "admin2@amiltone.com",
-            firstName: 'firstname2',
-            lastName: 'lastname2',
+            userName: 'userName2',
             password1: 'test1',
             password2: 'test'
           })
@@ -103,8 +100,7 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: "admin2@amiltone.fr",
-            firstName: 'firstname2',
-            lastName: 'lastname2',
+            userName: 'userName2',
             password1: 'tes',
             password2: 'tes'
           })
@@ -125,8 +121,7 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: "admin2@test.api",
-            firstName: 'firstname2',
-            lastName: 'lastname2',
+            userName: 'userName2',
             password1: 'test',
             password2: 'test'
           })
@@ -147,8 +142,7 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: config.users.default.admin.login,
-            firstName: 'firstname2',
-            lastName: 'lastname2',
+            userName: 'userName2',
             password1: 'test',
             password2: 'test',
             toomuch: 0
@@ -174,7 +168,6 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: config.users.default.admin.login,
-            firstName: 'firstname2',
             password1: 'test',
             password2: 'test'
           })
@@ -185,8 +178,8 @@ describe('/auth/register', () => {
                 {
                   errorCode: "required.openapi.validation",
                   location: "body",
-                  message: "instance requires property \"lastName\"",
-                  path: "lastName"
+                  message: "instance requires property \"userName\"",
+                  path: "userName"
                 }
               ],
               status: 400
@@ -200,8 +193,7 @@ describe('/auth/register', () => {
         .put(path.join(config.application.api.basePath, '/auth/register'))
         .send({
             email_address: 'user@amiltone.com',
-            firstName: 'firstname',
-            lastName: 'lastname',
+            userName: 'userName',
             password1: 'test',
             password2: 'test'
           })

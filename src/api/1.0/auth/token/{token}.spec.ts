@@ -36,8 +36,7 @@ describe('/auth/token/{token}', () => {
       await mongoHelper.insertOne(
         config.database.mongoDB.users_collection,
         {
-          firstName: 'firstname',
-          lastName: 'lastname',
+          userName: 'userName',
           email_address: config.users.default.admin.login,
           role: 'Administrator',
           password: {
@@ -53,8 +52,7 @@ describe('/auth/token/{token}', () => {
         mongoHelper.insertOne(
           config.database.mongoDB.users_collection,
           {
-            firstName: 'firstname2',
-            lastName: 'lastname2',
+            userName: 'userName2',
             email_address: 'admin2@amiltone.com',
             role: 'Administrator',
             password: {

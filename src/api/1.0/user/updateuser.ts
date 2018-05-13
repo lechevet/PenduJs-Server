@@ -26,9 +26,9 @@
 //       in: 'body',
 //       schema: {
 //         type: 'object',
-//         required: ['firstName', 'lastName', 'email_address'],
+//         required: ['userName', 'lastName', 'email_address'],
 //         properties: {
-//           firstName: {
+//           userName: {
 //             type: 'string'
 //           },
 //           lastName: {

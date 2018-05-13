@@ -6,16 +6,10 @@ import { usersService } from '../../services/1.x/user.service';
 
 const getParameters = [
   {
-    name: 'firstName',
+    name: 'userName',
     in: 'query',
     type: 'string',
     description: 'user first name.'
-  },
-  {
-    name: 'lastName',
-    in: 'query',
-    type: 'string',
-    description: 'user last name.'
   },
   {
     name: 'status',

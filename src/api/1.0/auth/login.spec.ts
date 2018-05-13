@@ -32,8 +32,7 @@ describe("/login", () => {
         config.database.mongoDB.users_collection,
         [
           {
-            firstName: 'firstname',
-            lastName: 'lastname',
+            userName: 'userName',
             email_address: config.users.default.admin.login,
             role: 'Administrator',
             password: {
@@ -46,8 +45,7 @@ describe("/login", () => {
             status: 'valid'
           },
           {
-            firstName: 'firstname',
-            lastName: 'lastname',
+            userName: 'userName',
             email_address: 'user@amiltone.com',
             role: 'SimpleUser',
             password: {
@@ -77,8 +75,7 @@ describe("/login", () => {
         .expect((res) => {
           expect(res.error).to.equal(false);
           expect(res.body.user).to.not.equal(null);
-          expect(res.body.user.firstName).to.equal('firstname');
-          expect(res.body.user.lastName).to.equal('lastname');
+          expect(res.body.user.userName).to.equal('userName');
           expect(res.body.user.email_address).to.equal(config.users.default.admin.login);
           expect(res.body.user.role).to.equal('Administrator');
           // And finally, check the JWT existence and validity

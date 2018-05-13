@@ -26,7 +26,7 @@
 //   await mongoHelper.insertOne(
 //     config.database.mongoDB.users_collection,
 //     {
-//       firstName: 'firstname',
+//       userName: 'userName',
 //       lastName: 'lastname',
 //       email_address: userLogin,
 //       role: userRole,

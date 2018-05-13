@@ -23,8 +23,7 @@ export const usersService = {
 
   async userRegister(credential:
     {
-      firstName: string,
-      lastName: string,
+      userName: string,
       email_address: string,
       password1: string,
       password2: string
@@ -85,8 +84,7 @@ export const usersService = {
         user = await mongoHelper.insertOne(
           config.database.mongoDB.users_collection,
           {
-            firstName: credential.firstName,
-            lastName: credential.lastName,
+            userName: credential.userName,
             email_address: credential.email_address,
             role: 'SimpleUser',
             status: 'valid',
@@ -106,7 +104,7 @@ export const usersService = {
         //   config.database.mongoDB.users_collection,
         //   { email_address: credential.email_address }
         // );
-        // await mailService.sendPendingRegisterMail(credential.email_address, credential.firstName, credential.lastName, userRole.role);
+        // await mailService.sendPendingRegisterMail(credential.email_address, credential.userName, credential.lastName, userRole.role);
       } else {
         const error = new Error('Passwords are differents');
         throw new WrongCredentialError(error);
@@ -115,8 +113,7 @@ export const usersService = {
 
     /* On renvoi les infos sans le mot de passe */
     const newcredential = {
-      firstName: credential.firstName,
-      lastName: credential.lastName,
+      userName: credential.userName,
       email_address: credential.email_address,
       status: 'valid'
     };
@@ -130,8 +127,7 @@ export const usersService = {
   },
 
   async getUsers(params: {
-    firstName: string,
-    lastName: string,
+    userName: string,
     role_title: string,
     offset: number,
     limit: number,
@@ -140,11 +136,8 @@ export const usersService = {
     fields: string[],
   }): Promise<object[]> {
     const query: any = {};
-    if (params.firstName) {
-      query.firstName = params.firstName;
-    }
-    if (params.lastName) {
-      query.lastName = params.lastName;
+    if (params.userName) {
+      query.userName = params.userName;
     }
     if (params.role_title) {
       query.role = params.role_title;
@@ -284,7 +277,7 @@ export const usersService = {
     }
   },
 
-  // async updateUser(credential: { email_address: string, firstName: string, lastName: string, token: string }): Promise<object> {
+  // async updateUser(credential: { email_address: string, userName: string, lastName: string, token: string }): Promise<object> {
   //   try {
   //     /* recuperer email en fonction du token */
   //     const decodedJwt: any =  jwt.verify(credential.token, config.application.jwt.secret);
@@ -317,7 +310,7 @@ export const usersService = {
   //       { email_address: credential.email_address },
   //       {
   //         $set: {
-  //           firstName: credential.firstName,
+  //           userName: credential.userName,
   //           lastName: credential.lastName
 
   //         }
@@ -482,7 +475,7 @@ export const usersService = {
         // TODO
         const token: any = await authService.createTokenLinkPassword(user);
         // sendMail
-        await mailService.sendNewPasswordMail(user.email_address, user.firstName, user.lastName, token.token);
+        await mailService.sendNewPasswordMail(user.email_address, user.userName, token.token);
         return 'ok';
       }
     } catch (error) {

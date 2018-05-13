@@ -23,8 +23,7 @@ async function newPendingRegister(userLogin: string, userPassword: string): Prom
     await mongoHelper.insertOne(
       config.database.mongoDB.users_collection,
       {
-        firstName: 'firstname',
-        lastName: 'lastname',
+        userName: 'userName',
         email_address: userLogin,
         role: 'SimpleUser',
         password: {
@@ -53,8 +52,7 @@ async function login(userLogin: string, userPassword: string, userRole: string, 
     await mongoHelper.insertOne(
       config.database.mongoDB.users_collection,
       {
-        firstName: 'firstname',
-        lastName: 'lastname',
+        userName: 'userName',
         email_address: userLogin,
         role: userRole,
         password: {

@@ -523,7 +523,7 @@ describe('/auth/tokens', () =&gt; {
       await mongoHelper.insertOne(
         config.database.mongoDB.users_collection,
         {
-          firstName: 'firstname',
+          userName: 'userName',
           lastName: 'lastname',
           email_address: config.users.default.admin.login,
           role: 'Administrator',

@@ -25,7 +25,7 @@
 //   await mongoHelper.insertOne(
 //     config.database.mongoDB.users_collection,
 //     {
-//       firstName: 'firstname',
+//       userName: 'userName',
 //       lastName: 'lastname',
 //       email_address: userLogin,
 //       role: userRole,
@@ -65,7 +65,7 @@
 //       .set('Authorization', `Bearer ${jwtAdmin}`)
 //       .send({
 //         email_address: config.users.default.admin.login,
-//         firstName: 'firstname2',
+//         userName: 'userName2',
 //         lastName: 'lastname2',
 //         toomuch: 'toomuch'
 //       })
@@ -93,7 +93,7 @@
 //       .set('Authorization', `Bearer ${jwtAdmin}`)
 //       .send({
 //         email_address: config.users.default.admin.login,
-//         firstName: 'firstname2'
+//         userName: 'userName2'
 //       })
 //       .expect(400)
 //       .expect((res) => {
@@ -120,7 +120,7 @@
 //       .set('Authorization', `Bearer ${jwtAdmin}`)
 //       .send({
 //         email_address: 'fakeuser@amiltone.fr',
-//         firstName: 'firstname2',
+//         userName: 'userName2',
 //         lastName: 'lastname2'
 //       })
 //       .expect(400)
@@ -144,7 +144,7 @@
 //       .set('Authorization', `Bearer ${jwtAdmin}`)
 //       .send({
 //         email_address: config.users.default.admin.login,
-//         firstName: 'firstname2',
+//         userName: 'userName2',
 //         lastName: 'lastname2'
 //       })
 //       .expect(201)
