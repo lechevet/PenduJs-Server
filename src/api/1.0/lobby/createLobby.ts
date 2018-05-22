@@ -4,7 +4,7 @@ import { gameService } from '../../../services/1.x/game.service';
 
 export const post: Operation = async function(req: any, res: any, next: any): Promise<void> {
     try {
-      const lobby: any = await gameService.initMatch(req.body);
+      const lobby: any = await gameService.initLobby(req.body);
       logger.info(generateLog({
         responseStatus: 201,
         responseMessage: `Lobby with id: ${lobby._id} successfully initiated.`

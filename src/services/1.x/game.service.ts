@@ -4,6 +4,7 @@ import { MongoError } from '../../models/errors/MongoError';
 import { InvalidParametersError } from '../../models/errors/InvalidParametersError';
 import { NotFoundError } from '../../models/errors/NotFoundError';
 import { logger } from '../../helpers/logger.helper';
+import * as moment from 'moment';
 import * as mongo from 'mongodb';
 
 const mongoHelper = new MongoHelper();
@@ -17,7 +18,8 @@ export const gameService = {
             const lobby = await mongoHelper.findOne(
                 config.database.mongoDB.lobbies_collection,
                 {
-                    _id: ID
+                    _id: ID,
+                    status: 'valid'
                 },
                 {
                     fields: {
@@ -47,8 +49,7 @@ export const gameService = {
             return await mongoHelper.deleteOne(
                 config.database.mongoDB.lobbies_collection,
                 {
-                    _id: ID,
-                    status: "valid"
+                    _id: ID
                 },
                 {},
                 false
@@ -80,14 +81,15 @@ export const gameService = {
         return results;
     },
 
-    // Create a empty match
+    // Create a empty lobby
     async createLobby(parameters: {
         name?: string
     }): Promise<any> {
         // prepare the final query
         const newLobby = {
             name: parameters.name,
-            status: 'valid'
+            status: 'valid',
+            players: []
         };
         // execute the query
         try {
@@ -103,53 +105,91 @@ export const gameService = {
         }
     },
 
-    // async addUserToMatch(parameters: {
-    //     idPlayer?: string,
-    //     position: string,
-    //     equipe: string
-    // }): Promise<boolean> {
-    //     if (await this.getCurrentMatchID() === null) {
-    //         const error = new Error('Non current pending match');
-    //         throw new GeneralError(error, NotFoundError.NonExistingGame, errorType.NotFound);
-    //     } else {
-    //         return await matchHandlerService.addUserToMatch({
-    //             matchId: await this.getCurrentMatchID(),
-    //             idPlayer: parameters.idPlayer ? parameters.idPlayer : '',
-    //             position: parameters.position,
-    //             equipe: parameters.equipe
-    //         });
-    //     }
-    // },
+    async addUserToLobby(parameters: {
+        idLobby: string,
+        idPlayer: string
+    }): Promise<boolean> {
+        const ID = new mongo.ObjectId(parameters.idLobby);
+        try {
+            const result = await mongoHelper.updateOne(
+                config.database.mongoDB.lobbies_collection,
+                {
+                    _id: ID
+                },
+                {
+                    $push: {
+                        players: {
+                            player: parameters.idPlayer,
+                            timestamp: moment().toISOString(),
+                        }
+                    }
+                }
+            );
+            return !!(result.result.nModified && result.result.ok);
+        } catch (error) {
+            logger.error(error);
+            const newError = new Error('Mongo Error addUserToLobby');
+            throw new MongoError(newError);
+        }
+    },
 
-    // Start a match 'en attente'
-    // async startMatch(): Promise<boolean> {
-    //     if (await this.getCurrentMatchID() === null) {
-    //         const error = new Error('Non current pending match');
-    //         throw new GeneralError(error, NotFoundError.NonExistingGame, errorType.NotFound);
-    //     } else {
-    //         return await matchHandlerService.startMatch({ matchId: await this.getCurrentMatchID() });
-    //     }
-    // },
+    async delUserFromLobby(parameters: {
+        idLobby: string,
+        idPlayer: string
+    }): Promise<boolean> {
+        const ID = new mongo.ObjectId(parameters.idLobby);
+        try {
+            const result = await mongoHelper.updateOne(
+                config.database.mongoDB.lobbies_collection,
+                {
+                    _id: ID
+                },
+                {
+                    $pull: {
+                        players: {
+                            player: parameters.idPlayer,
+                        }
+                    }
+                }
+            );
 
-    // Create and start a match
-    async initMatch(parameters: {
+        // Check s'il reste des users dans le lobby, sinon delete le lobby
+        const lobby = await mongoHelper.findOne(
+            config.database.mongoDB.lobbies_collection,
+            {
+                _id: ID,
+                status: 'valid'
+            },
+            {
+                fields: {
+                    // created_at: 0,
+                    updated_at: 0,
+                    deleted_at: 0
+                }
+            }
+        );
+        if (lobby.players.toString() === '') {
+            console.log(lobby.players);
+            console.log('il faut delete le lobby');
+            await this.deleteLobby(parameters.idLobby);
+        }
+            return !!(result.result.nModified && result.result.ok);
+        } catch (error) {
+            logger.error(error);
+            const newError = new Error('Mongo Error delUserFromLobby');
+            throw new MongoError(newError);
+        }
+    },
+
+    // Create and start a lobby
+    async initLobby(parameters: {
         name: string
     }): Promise<object> {
         const result = await this.createLobby(parameters);
-        // await matchHandlerService.setReadyMatch(result._id);
+
         // await this.startMatch();
+
         return result;
     },
-
-
-    // async cancelMatch(): Promise<boolean> {
-    //     if (await this.getCurrentMatchID() === null) {
-    //         const error = new Error('Non current match');
-    //         throw new GeneralError(error, NotFoundError.NonExistingGame, errorType.NotFound);
-    //     } else {
-    //         const result = await matchHandlerService.cancelMatch(await this.getCurrentMatchID());
-    //         return result;
-    //     }
-    // },
 };
 
