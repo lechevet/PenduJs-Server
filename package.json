@@ -61,6 +61,7 @@
     "nodemailer": "^4.1.1",
     "nyc": "^11.1.0",
     "pbkdf2": "^3.0.12",
+    "socket.io": "^2.1.1",
     "supertest": "^3.0.0",
     "swagger-tools": "^0.10.3",
     "to-iso-string": "0.0.2",

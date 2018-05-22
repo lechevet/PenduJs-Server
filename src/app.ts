@@ -2,6 +2,7 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as multer from 'multer';
 import * as fs from 'mz/fs';
+import * as SocketIO from 'socket.io';
 
 import { config } from './config';
 
@@ -83,7 +84,17 @@ async function init(): Promise<void> {
 
     // Server start up (listening for http connection)
     logger.info('Initialization step 5: Http server start up ...');
-    await httpHelper.initHttp(app);
+    await httpHelper.initHttp(app)
+      .then(
+        server => {
+          let io = new SocketIO(server);
+          io.on('connection', function(socket) {
+            io.emit('game', 'user connected');
+            socket.on('guessLetter', function(letter) {
+              io.emit('game', letter);
+            })
+          })
+        });
 
     app.use(errorHandler);
 
