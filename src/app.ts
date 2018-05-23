@@ -19,6 +19,7 @@ export const app: any = express();
 
 process.title = config.application.process_title;
 
+
 // Starting up of the server
 async function init(): Promise<void> {
   try {
@@ -88,16 +89,9 @@ async function init(): Promise<void> {
     await httpHelper.initHttp(app)
       .then(
         server => {
-          let hangman = new Hangman();
           let io = new SocketIO(server);
-          io.on('connection', function(socket) {
-            console.log("user connected");
-            io.emit('game', 'user connected');
-            socket.on('guessLetter', function(letter) {
-              console.log(letter);
-              io.emit('game', hangman.guessLetter(letter));
-            })
-          })
+          let hangman = new Hangman(io);
+          hangman.startGame();
         });
 
     app.use(errorHandler);

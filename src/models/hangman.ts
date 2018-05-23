@@ -5,8 +5,9 @@ export class Hangman {
     guesses: any;
     guessesCount: number;
     status: string;
+    io: any;
 
-    constructor() {
+    constructor(io: any) {
         this.word = "bonjour";
         this.array = [];
         for (let i = 0; i < this.word.length; i++) {
@@ -16,6 +17,26 @@ export class Hangman {
         this.guesses = [];
         this.guessesCount = 0;
         this.status = "player";
+        this.io = io;
+    }
+
+    async startGame(): Promise<any> {
+        this.io.on('connection', (socket) => {
+            this.io.emit('game', this.getAttributes());
+            socket.on('guessLetter', (letter) => {
+              console.log(letter);
+              this.io.emit('game', this.guessLetter(letter));
+            });
+          });
+        return this.word;
+    }
+
+    getAttributes() {
+        return {
+            format: this.format,
+            guesses: this.guesses,
+            wrongGuessCount: this.guessesCount,
+            status: this.isWinner(this.word, this.guesses)        }
     }
 
     wrongGuessCount(word: string, guesses: any) {
@@ -56,14 +77,12 @@ export class Hangman {
     }
 
     guessLetter(letter) {
-        let newGuesses = this.guesses.concat([letter]);
-        this.guesses = newGuesses;
-        let newGuessCount = this.wrongGuessCount(this.word, newGuesses);
-        this.guessesCount = newGuessCount;
-        let showLetter = this.showGuess(this.word, newGuesses);
+        this.guesses = this.guesses.concat([letter]);
+        this.guessesCount = this.wrongGuessCount(this.word, this.guesses);
+        this.format = this.showGuess(this.word, this.guesses);
         
         return {
-            format: showLetter,
+            format: this.format,
             guesses: this.guesses,
             wrongGuessCount: this.guessesCount,
             status: this.isWinner(this.word, this.guesses)
