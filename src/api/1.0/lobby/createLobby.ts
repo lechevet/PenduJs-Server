@@ -43,7 +43,7 @@ post.apiDoc = {
       schema: {
         type: 'object',
         properties: {
-          user: {
+          lobby: {
             type: 'object'
           }
         }

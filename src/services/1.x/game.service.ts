@@ -93,11 +93,11 @@ export const gameService = {
         };
         // execute the query
         try {
-            const result = await mongoHelper.insertOne(
+            await mongoHelper.insertOne(
                 config.database.mongoDB.lobbies_collection,
                 newLobby
             );
-            return { _id: result.ops[0]._id.toString() };
+            return newLobby;
         } catch (error) {
             logger.error(error);
             const newError = new Error('Mongo Error createLobby');
