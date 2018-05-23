@@ -91,8 +91,10 @@ async function init(): Promise<void> {
           let hangman = new Hangman();
           let io = new SocketIO(server);
           io.on('connection', function(socket) {
+            console.log("user connected");
             io.emit('game', 'user connected');
             socket.on('guessLetter', function(letter) {
+              console.log(letter);
               io.emit('game', hangman.guessLetter(letter));
             })
           })

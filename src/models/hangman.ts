@@ -3,7 +3,7 @@ export class Hangman {
     array: any;
     format: string;
     guesses: any;
-    wrongGuessesCount: number;
+    guessesCount: number;
     status: string;
 
     constructor() {
@@ -14,7 +14,7 @@ export class Hangman {
         }
         this.format = this.array.join(' ');
         this.guesses = [];
-        this.wrongGuessesCount = 0;
+        this.guessesCount = 0;
         this.status = "player";
     }
 
@@ -55,17 +55,18 @@ export class Hangman {
         }
     }
 
-    async guessLetter(letter): Promise<object> {
+    guessLetter(letter) {
         let newGuesses = this.guesses.concat([letter]);
+        this.guesses = newGuesses;
         let newGuessCount = this.wrongGuessCount(this.word, newGuesses);
+        this.guessesCount = newGuessCount;
         let showLetter = this.showGuess(this.word, newGuesses);
-
+        
         return {
-            word: this.word,
             format: showLetter,
-            guesses: newGuesses,
-            wrongGuessCount: newGuessCount,
-            status: this.isWinner(this.word, newGuesses)
+            guesses: this.guesses,
+            wrongGuessCount: this.guessesCount,
+            status: this.isWinner(this.word, this.guesses)
         }
     }
 }
