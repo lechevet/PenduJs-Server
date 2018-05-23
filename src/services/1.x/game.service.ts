@@ -169,8 +169,6 @@ export const gameService = {
             }
         );
         if (lobby.players.toString() === '') {
-            console.log(lobby.players);
-            console.log('il faut delete le lobby');
             await this.deleteLobby(parameters.idLobby);
         }
             return !!(result.result.nModified && result.result.ok);
@@ -186,7 +184,6 @@ export const gameService = {
         name: string
     }): Promise<object> {
         const result = await this.createLobby(parameters);
-
         // await this.startMatch();
 
         return result;

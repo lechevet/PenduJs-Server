@@ -13,6 +13,7 @@ import * as openapiSetup from './helpers/init/openapi-setup.helper';
 import * as jwtHelper from './helpers/jwt.helper';
 import { logger } from './helpers/logger.helper';
 import { errorHandler } from './models/error';
+import { Hangman } from './models/hangman';
 
 export const app: any = express();
 
@@ -87,11 +88,12 @@ async function init(): Promise<void> {
     await httpHelper.initHttp(app)
       .then(
         server => {
+          let hangman = new Hangman();
           let io = new SocketIO(server);
           io.on('connection', function(socket) {
             io.emit('game', 'user connected');
             socket.on('guessLetter', function(letter) {
-              io.emit('game', letter);
+              io.emit('game', hangman.guessLetter(letter));
             })
           })
         });
