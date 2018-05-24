@@ -19,7 +19,6 @@ export const app: any = express();
 
 process.title = config.application.process_title;
 
-
 // Starting up of the server
 async function init(): Promise<void> {
   try {

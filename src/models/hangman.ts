@@ -1,3 +1,5 @@
+import words from '../helpers/words';
+
 export class Hangman {
     word: string;
     array: any;
@@ -6,9 +8,15 @@ export class Hangman {
     guessesCount: number;
     status: string;
     io: any;
+    room: string;
 
     constructor(io: any) {
-        this.word = "bonjour";
+        this.initGame();
+        this.io = io;
+    }
+
+    initGame() {
+        this.word = words[Math.floor(Math.random() * words.length)];
         this.array = [];
         for (let i = 0; i < this.word.length; i++) {
             this.array.push('_');
@@ -17,26 +25,41 @@ export class Hangman {
         this.guesses = [];
         this.guessesCount = 0;
         this.status = "player";
-        this.io = io;
     }
 
     async startGame(): Promise<any> {
         this.io.on('connection', (socket) => {
-            this.io.emit('game', this.getAttributes());
-            socket.on('guessLetter', (letter) => {
-              console.log(letter);
-              this.io.emit('game', this.guessLetter(letter));
+            socket.on('room', (room) => {
+                socket.join(room);
+                this.room = room;
+                this.emitGame(this.io, this.getAttributes());
+                socket.on('guessLetter', (letter) => {
+                    this.emitGame(this.io, this.guessLetter(letter));
+                });
+                socket.on('start', () => {
+                    this.initGame();
+                    this.emitGame(this.io, this.getAttributes());
+                });
             });
-          });
+        });
         return this.word;
     }
 
+    emitGame(io, res) {
+        io.in(this.room).emit('game', res);
+    }
+
     getAttributes() {
-        return {
+        let res:any = {
             format: this.format,
             guesses: this.guesses,
             wrongGuessCount: this.guessesCount,
-            status: this.isWinner(this.word, this.guesses)        }
+            status: this.isWinner(this.word, this.guesses)
+        }
+        if (res.wrongGuessCount === 8) {
+            res = {...res, word: this.word };
+        }
+        return res;
     }
 
     wrongGuessCount(word: string, guesses: any) {
@@ -77,15 +100,22 @@ export class Hangman {
     }
 
     guessLetter(letter) {
-        this.guesses = this.guesses.concat([letter]);
-        this.guessesCount = this.wrongGuessCount(this.word, this.guesses);
-        this.format = this.showGuess(this.word, this.guesses);
-        
-        return {
+        let res: any = {};
+        if (this.guessesCount < 8) {
+            this.guesses = this.guesses.concat([letter]);
+            this.guessesCount = this.wrongGuessCount(this.word, this.guesses);
+            this.format = this.showGuess(this.word, this.guesses); 
+        }
+        res = {
             format: this.format,
             guesses: this.guesses,
             wrongGuessCount: this.guessesCount,
             status: this.isWinner(this.word, this.guesses)
         }
+        if (this.guessesCount === 8) {
+            res = {...res, word: this.word};
+        }
+
+        return res;
     }
 }
