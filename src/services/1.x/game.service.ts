@@ -6,7 +6,8 @@ import { NotFoundError } from '../../models/errors/NotFoundError';
 import { logger } from '../../helpers/logger.helper';
 import * as moment from 'moment';
 import * as mongo from 'mongodb';
-
+import { Hangman } from '../../models/hangman';
+import hangmanManager  from '../../models/hangmanManager';
 const mongoHelper = new MongoHelper();
 
 export const gameService = {

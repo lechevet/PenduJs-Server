@@ -13,7 +13,7 @@ import * as openapiSetup from './helpers/init/openapi-setup.helper';
 import * as jwtHelper from './helpers/jwt.helper';
 import { logger } from './helpers/logger.helper';
 import { errorHandler } from './models/error';
-import { Hangman } from './models/hangman';
+import hangmanManager from './models/hangmanManager';
 
 export const app: any = express();
 
@@ -88,12 +88,10 @@ async function init(): Promise<void> {
     await httpHelper.initHttp(app)
       .then(
         server => {
-          let hangmanArray: any = [];
           let io = new SocketIO(server);
-          hangmanArray.push(new Hangman("5af86a4f453a442a50b4f419"));
           io.on('connection', (socket) => {
             socket.on('room', (room) => {
-              hangmanArray.forEach(hangman => {
+              hangmanManager.get().forEach(hangman => {
                 if (hangman.id === room) {
                   hangman.startGame(io, socket);
                 }

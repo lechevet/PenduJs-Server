@@ -1,6 +1,8 @@
 import { Operation } from 'express-openapi';
 import { generateLog, logger } from '../../../helpers/logger.helper';
 import { gameService } from '../../../services/1.x/game.service';
+import { Hangman } from '../../../models/hangman';
+import hangmanManager from '../../../models/hangmanManager';
 
 export const post: Operation = async function(req: any, res: any, next: any): Promise<void> {
     try {
@@ -9,6 +11,7 @@ export const post: Operation = async function(req: any, res: any, next: any): Pr
         responseStatus: 201,
         responseMessage: `Lobby with id: ${lobby._id} successfully initiated.`
       }));
+      hangmanManager.push(new Hangman("" + lobby._id));
       res.status(201).json(lobby);
     } catch (error) {
       logger.error(error);
