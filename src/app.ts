@@ -88,9 +88,18 @@ async function init(): Promise<void> {
     await httpHelper.initHttp(app)
       .then(
         server => {
+          let hangmanArray: any = [];
           let io = new SocketIO(server);
-          let hangman = new Hangman(io);
-          hangman.startGame();
+          hangmanArray.push(new Hangman("5af86a4f453a442a50b4f419"));
+          io.on('connection', (socket) => {
+            socket.on('room', (room) => {
+              hangmanArray.forEach(hangman => {
+                if (hangman.id === room) {
+                  hangman.startGame(io, socket);
+                }
+              }); 
+            });
+          });
         });
 
     app.use(errorHandler);

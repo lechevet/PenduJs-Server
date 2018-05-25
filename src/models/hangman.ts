@@ -7,12 +7,12 @@ export class Hangman {
     guesses: any;
     guessesCount: number;
     status: string;
-    io: any;
     room: string;
+    id: string;
 
-    constructor(io: any) {
+    constructor(id: string) {
         this.initGame();
-        this.io = io;
+        this.id = id;
     }
 
     initGame() {
@@ -27,26 +27,22 @@ export class Hangman {
         this.status = "player";
     }
 
-    async startGame(): Promise<any> {
-        this.io.on('connection', (socket) => {
-            socket.on('room', (room) => {
-                socket.join(room);
-                this.room = room;
-                this.emitGame(this.io, this.getAttributes());
-                socket.on('guessLetter', (letter) => {
-                    this.emitGame(this.io, this.guessLetter(letter));
-                });
-                socket.on('start', () => {
-                    this.initGame();
-                    this.emitGame(this.io, this.getAttributes());
-                });
-            });
+    async startGame(io, socket): Promise<any> {
+        console.log(this.id);
+        socket.join(this.id);
+        this.emitGame(io, this.getAttributes());
+        socket.on('guessLetter', (letter) => {
+            this.emitGame(io, this.guessLetter(letter));
+        });
+        socket.on('start', () => {
+            this.initGame();
+            this.emitGame(io, this.getAttributes());
         });
         return this.word;
     }
 
     emitGame(io, res) {
-        io.in(this.room).emit('game', res);
+        io.in(this.id).emit('game', res);
     }
 
     getAttributes() {
