@@ -24,3 +24,6 @@ Changer le rôle 'simpleUser' en 'Administrator'
 Changer le status de 'pending' en 'valid'
 
 Vous êtes set
+
+# Demo
+hazarp.ddns.net
